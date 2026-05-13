@@ -5,7 +5,6 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "customer_selection")
@@ -16,8 +15,8 @@ public class CustomerSelection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private  String customerid;
-        @Column(columnDefinition = "jsonb") // PostgreSQL JSON column
-        private String colors;
+    @Column(length = 4000)
+    private String colors;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

@@ -2,7 +2,6 @@ package ecommerce.com.srishakram.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.JdbcTypeCode;
 
 import java.util.List;
 
@@ -21,8 +20,9 @@ public class Products {
     private Integer offer_price;
     private String img;
 
-    @JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
-    @Column(columnDefinition = "json")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "image_url")
     private List<String> images;
 
     // Category (plain, silk, pattu, etc.)
@@ -38,4 +38,5 @@ public class Products {
 
     private String color;
     private Double weight;
+    //private boolean active;
 }

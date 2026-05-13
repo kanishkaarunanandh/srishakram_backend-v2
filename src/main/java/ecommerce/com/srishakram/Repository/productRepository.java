@@ -19,14 +19,14 @@ public interface productRepository extends JpaRepository<Products, Long> {
     List<Products> findByTitleContainingIgnoreCase(String title);
 
     @Query("""
-       SELECT p FROM products p
+       SELECT p FROM Products p
        WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :q, '%'))
           OR LOWER(p.category) LIKE LOWER(CONCAT('%', :q, '%'))
     """)
     List<Products> searchMainProducts(String q);
 
     @Query("""
-       SELECT p FROM products p
+       SELECT p FROM Products p
        WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :q, '%'))
           OR LOWER(p.category) LIKE LOWER(CONCAT('%', :q, '%'))
           OR LOWER(p.color) LIKE LOWER(CONCAT('%', :q, '%'))
@@ -35,7 +35,7 @@ public interface productRepository extends JpaRepository<Products, Long> {
 
     List<Products> findTop10ByColorIgnoreCase(String q);
 
-    List<Products> findTop6ByOrderByIdDesc();
+    List<Products> findTop7ByOrderByIdDesc();
 
     Optional<Products> findById(Long id);
 
@@ -128,20 +128,20 @@ public interface productRepository extends JpaRepository<Products, Long> {
     long countByPriceBetweenAndNewArrivalTrueAndColorIn(
             Double min, Double max, List<String> color);
 
-    @Query("SELECT DISTINCT p.color FROM products p WHERE p.category = :category AND p.color IS NOT NULL")
+    @Query("SELECT DISTINCT p.color FROM Products p WHERE p.category = :category AND p.color IS NOT NULL")
     List<String> findDistinctColorsByCategory(String category);
 
     Page<Products> findBySubcategoryAndPriceBetween(
             String subcategory, Double min, Double max, Pageable pageable);
 
     @Query("""
-SELECT p FROM products p
+SELECT p FROM Products p
 WHERE LOWER(p.category) = LOWER(:value)
    OR LOWER(p.subcategory) = LOWER(:value)
 """)
     Page<Products> findByCategoryOrSubcategory(String value, Pageable pageable);
     @Query("""
-    SELECT p FROM products p
+    SELECT p FROM Products p
     WHERE LOWER(p.category) = LOWER(:category)
       AND LOWER(p.subcategory) = LOWER(:subcategory)
       AND p.price BETWEEN :minPrice AND :maxPrice
@@ -157,7 +157,7 @@ WHERE LOWER(p.category) = LOWER(:value)
     );
 
     @Query("""
-    SELECT p FROM products p
+    SELECT p FROM Products p
     WHERE LOWER(p.category) = LOWER(:category)
       AND LOWER(p.subcategory) = LOWER(:subcategory)
       AND p.price BETWEEN :minPrice AND :maxPrice
@@ -175,7 +175,7 @@ WHERE LOWER(p.category) = LOWER(:value)
     );
 
     @Query("""
-    SELECT p FROM products p
+    SELECT p FROM Products p
     WHERE LOWER(p.category) = LOWER(:category)
       AND LOWER(p.subcategory) = LOWER(:subcategory)
       AND p.price BETWEEN :minPrice AND :maxPrice
@@ -189,7 +189,7 @@ WHERE LOWER(p.category) = LOWER(:value)
     );
 
     @Query("""
-    SELECT p FROM products p
+    SELECT p FROM Products p
     WHERE LOWER(p.category) = LOWER(:category)
       AND LOWER(p.subcategory) = LOWER(:subcategory)
       AND p.price BETWEEN :minPrice AND :maxPrice

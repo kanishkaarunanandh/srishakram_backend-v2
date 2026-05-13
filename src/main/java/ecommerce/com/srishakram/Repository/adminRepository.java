@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface adminRepository extends JpaRepository<Admin, Long> {
 
-    @Query("SELECT a.role FROM admin a WHERE a.password = :password")
+    @Query("SELECT a.role FROM Admin a WHERE a.password = :password")
     String rolecheck(@Param("password") String password);
 }

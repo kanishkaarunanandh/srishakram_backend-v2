@@ -23,13 +23,13 @@ public class SareeJournal {
 
     // Dynamic heritage steps (JSON)
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
+    @Column(columnDefinition = "json")
     private JsonNode heritageSteps;
 
     // Zari certificate image
     private String zariCertificateImage;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
+    @Column(columnDefinition = "json")
     private JsonNode customerReview;
 }

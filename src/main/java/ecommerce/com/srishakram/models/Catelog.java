@@ -22,7 +22,7 @@ public class Catelog {
 
     @JsonProperty("Subcategory")
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
+    @Column(columnDefinition = "json")
     private List<String> subcategory = new ArrayList<>();
 
     private String image;

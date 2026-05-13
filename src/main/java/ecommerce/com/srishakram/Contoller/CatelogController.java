@@ -6,10 +6,8 @@ import ecommerce.com.srishakram.models.Catelog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +42,32 @@ public class CatelogController {
     @GetMapping("/catelog")
     public List<Catelog> getCatalog() {
         return catelogRepository.findAllByOrderByIdAsc();
+    }
+
+    @PutMapping("catelog/{id}")
+    public ResponseEntity<Catelog> update(
+            @PathVariable Long id,
+            @RequestBody Catelog body
+    ) {
+        Catelog updated = CatelogService.update(id, body);
+        return ResponseEntity.ok(updated);
+    }
+
+    // 🗑 DELETE CATEGORY
+    @DeleteMapping("catelog/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        CatelogService.delete(id);
+        return ResponseEntity.ok("Category deleted successfully");
+    }
+
+    // 🗑 DELETE SINGLE SUBCATEGORY
+    @DeleteMapping("/{id}/subcategory")
+    public ResponseEntity<Catelog> deleteSubcategory(
+            @PathVariable Long id,
+            @RequestParam String sub
+    ) {
+        Catelog updated = CatelogService.removeSubcategory(id, sub);
+        return ResponseEntity.ok(updated);
     }
 
 

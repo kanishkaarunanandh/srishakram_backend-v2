@@ -1,5 +1,6 @@
 package ecommerce.com.srishakram.admin.Service;
 
+import ecommerce.com.srishakram.Repository.CartRepository;
 import ecommerce.com.srishakram.admin.Repository.AdminProductRepository;
 import ecommerce.com.srishakram.models.Products;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 public class AdminProductService {
     @Autowired
     private AdminProductRepository productrepo;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     public Products save(Products values) {
         return productrepo.save(values);
@@ -101,5 +105,25 @@ public class AdminProductService {
                     return savedProduct;
                 })
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+    }
+    @Transactional
+    public void deleteById(Long id) {
+
+        if (!productrepo.existsById(id)) {
+            throw new RuntimeException("Product not found");
+        }
+
+        System.out.println("=== DELETING PRODUCT ===");
+        System.out.println("Product ID: " + id);
+
+        // 🔥 STEP 1: remove from cart
+        cartRepository.deleteByProductId(id);
+        System.out.println("✅ Deleted from cart");
+
+        // 🔥 STEP 2: delete product
+        productrepo.deleteById(id);
+        System.out.println("✅ Deleted from products");
+
+        System.out.println("========================");
     }
 }

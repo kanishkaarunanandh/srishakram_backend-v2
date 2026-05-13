@@ -1,6 +1,7 @@
 package ecommerce.com.srishakram.admin.Controllers;
 
 import ecommerce.com.srishakram.admin.DTO.SareeJournalRequest;
+import ecommerce.com.srishakram.admin.Repository.SareeJournalRepository;
 import ecommerce.com.srishakram.admin.Service.SareeJournalService;
 import ecommerce.com.srishakram.models.SareeJournal;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 public class SareeJournalController {
 
     private final SareeJournalService service;
+    private final SareeJournalRepository sareeJournalRepository;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody SareeJournalRequest request) {
@@ -40,5 +42,30 @@ public class SareeJournalController {
     public ResponseEntity<?> getAlljournal()
     {
         return new ResponseEntity<>(service.getAlljournal(), HttpStatus.OK);
+    }
+
+    // ✏️ UPDATE JOURNAL
+    @PutMapping("/{id}")
+    public ResponseEntity<SareeJournal> updateJournal(
+            @PathVariable Long id,
+            @RequestBody SareeJournal body
+    ) {
+        SareeJournal existing = sareeJournalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Journal not found"));
+
+        existing.setProductName(body.getProductName());
+        existing.setHeroImage(body.getHeroImage());
+        existing.setZariCertificateImage(body.getZariCertificateImage());
+        existing.setHeritageSteps(body.getHeritageSteps());
+        existing.setCustomerReview(body.getCustomerReview());
+
+        return ResponseEntity.ok(sareeJournalRepository.save(existing));
+    }
+
+    // 🗑 DELETE JOURNAL
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteJournal(@PathVariable Long id) {
+        sareeJournalRepository.deleteById(id);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }

@@ -4,23 +4,27 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import ecommerce.com.srishakram.models.Users;
 
 @Component
 public class JwtUtil {
-
-    private final String SECREAT = "sri shakram 2026 e-commerce silk saree";
-    private final long EXPIRATION = 1000 * 60 * 60 * 2; // 2 hours
-    private final Key secretKey = Keys.hmacShaKeyFor(SECREAT.getBytes(StandardCharsets.UTF_8));
+    @Value("${jwt.secret}")
+    private  String SECRET;
+    private final long EXPIRATION = 1000 * 60 * 60 * 2;// 2 hours
+    private Key secretKey;
+    @PostConstruct
+    public void init() {
+        secretKey = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    }
 
     // Existing method
     public String generateToken(String email, String role) {

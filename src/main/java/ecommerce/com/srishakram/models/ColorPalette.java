@@ -20,6 +20,6 @@ public class ColorPalette {
     private String main;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb", nullable = false)
+    @Column(columnDefinition = "json", nullable = false)
     private Map<String, String> variants;
 }

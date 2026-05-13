@@ -57,4 +57,9 @@ public class AdminProductController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+        productserve.deleteById(id);
+        return ResponseEntity.ok("Product deleted successfully");
+    }
 }

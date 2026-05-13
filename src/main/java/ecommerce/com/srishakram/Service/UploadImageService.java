@@ -3,99 +3,68 @@ package ecommerce.com.srishakram.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import jakarta.annotation.PostConstruct;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
 public class UploadImageService {
 
-    @Value("${aws.region}")
-    private String region;
+    private final Path uploadDir;
 
-    @Value("${aws.s3.bucket}")
-    private String bucket;
-
-    @Value("${aws.accessKeyId}")
-    private String accessKey;
-
-    @Value("${aws.secretAccessKey}")
-    private String secretKey;
-
-    private S3Client s3Client;
-
-    @PostConstruct
-    public void init() {
-        AwsBasicCredentials creds = AwsBasicCredentials.create(accessKey, secretKey);
-        s3Client = S3Client.builder()
-                .region(Region.of(region))
-                .credentialsProvider(StaticCredentialsProvider.create(creds))
-                .build();
+    public UploadImageService(@Value("${demo.upload.dir:demo-uploads}") String uploadDir) throws IOException {
+        this.uploadDir = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Files.createDirectories(this.uploadDir);
     }
 
-    /**
-     * Uploads a file to S3 (images/ or videos/ folder automatically)
-     *
-     * @param file MultipartFile
-     * @return public URL of uploaded file
-     * @throws IOException
-     */
     public String uploadFile(MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
 
-        // Decide folder based on content type
-        String prefix = file.getContentType() != null && file.getContentType().startsWith("video/")
-                ? "videos/"
-                : "images/";
+        String originalName = sanitize(file.getOriginalFilename());
+        String fileName = UUID.randomUUID() + "_" + originalName;
+        Path target = uploadDir.resolve(fileName).normalize();
 
-        String key = prefix + UUID.randomUUID() + "_" + file.getOriginalFilename();
-
-        s3Client.putObject(
-                PutObjectRequest.builder()
-                        .bucket(bucket)
-                        .key(key)
-                        .contentType(file.getContentType())
-                        .build(),
-                RequestBody.fromInputStream(file.getInputStream(), file.getSize())
-        );
-
-        return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + key;
-    }
-
-    /**
-     * Downloads a file from S3
-     *
-     * @param key S3 object key
-     * @return file as byte array
-     * @throws IOException
-     */
-    public byte[] downloadFile(String key) throws IOException {
-        if (key == null || key.isEmpty()) {
-            throw new IllegalArgumentException("S3 key is empty");
+        if (!target.startsWith(uploadDir)) {
+            throw new IOException("Invalid upload path");
         }
 
-        Path tempFile = Files.createTempFile("s3file-", ".tmp");
+        Files.copy(file.getInputStream(), target);
 
-        s3Client.getObject(
-                GetObjectRequest.builder()
-                        .bucket(bucket)
-                        .key(key)
-                        .build(),
-                tempFile
-        );
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/demo-uploads/")
+                .path(fileName)
+                .toUriString();
+    }
 
-        return Files.readAllBytes(tempFile);
+    public byte[] downloadFile(String keyOrUrl) throws IOException {
+        String fileName = extractFileName(keyOrUrl);
+        Path target = uploadDir.resolve(fileName).normalize();
+        if (!target.startsWith(uploadDir) || !Files.exists(target)) {
+            throw new IOException("File not found");
+        }
+        return Files.readAllBytes(target);
+    }
+
+    private String sanitize(String name) {
+        String fallback = "upload";
+        String clean = name == null || name.isBlank() ? fallback : name;
+        return clean.replaceAll("\\s+", "_")
+                .replaceAll("[^a-zA-Z0-9._-]", "");
+    }
+
+    private String extractFileName(String keyOrUrl) {
+        try {
+            return Paths.get(new URI(keyOrUrl).getPath()).getFileName().toString();
+        } catch (IllegalArgumentException | URISyntaxException e) {
+            return Paths.get(keyOrUrl).getFileName().toString();
+        }
     }
 }
