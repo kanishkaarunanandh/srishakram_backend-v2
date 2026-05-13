@@ -39,7 +39,7 @@ import java.util.Map;
 @Configuration
 public class DemoDataSeeder {
 
-    private static final String BASE = "http://localhost:8080/demo-media/";
+    private static final String BASE = "https://srishakram-backend-v2.onrender.com/demo-media/";
 
     @Bean
     CommandLineRunner seedDemoData(
@@ -228,7 +228,7 @@ public class DemoDataSeeder {
 
     private void seedHomepageMedia(ImageRepository imageRepository) {
         Image image = new Image();
-        image.setImg1(BASE + "hero%20video.mp4");
+        image.setImg1(BASE + "hero-video.mp4");
         image.setImg2(BASE + "design.mp4");
         image.setImg3(BASE + "design2.mp4");
         image.setImg4(BASE + "design3.mp4");
@@ -237,10 +237,10 @@ public class DemoDataSeeder {
         image.setImg7(BASE + "download%20(1).jpg");
         image.setImg8(BASE + "download%20(2).jpg");
         image.setImg9(BASE + "download%20(3).jpg");
-        image.setImg10(BASE + "11.JPG");
-        image.setImg11(BASE + "Saree.jpg");
-        image.setImg12(BASE + "10.JPG");
-        image.setImg13(BASE + "11.JPG");
+        image.setImg10(BASE + "11.jpg");
+        image.setImg11(BASE + "saree.jpg");
+        image.setImg12(BASE + "10.jpg");
+        image.setImg13(BASE + "11.jpg");
 
         imageRepository.saveAndFlush(image);
     }
@@ -319,22 +319,22 @@ public class DemoDataSeeder {
                   {
                     "title":"Mulberry Silk Selection",
                     "description":"Fine silk threads are selected for a smooth, lustrous drape.",
-                    "image":"http://localhost:8080/demo-media/10.JPG"
+                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/10.jpg"
                   },
                   {
                     "title":"Zari Preparation",
                     "description":"Gold-toned zari is readied for borders, motifs, and pallu work.",
-                    "image":"http://localhost:8080/demo-media/zari.webp"
+                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/zari.webp"
                   },
                   {
                     "title":"Handloom Weaving",
                     "description":"Artisans weave the saree with traditional Kanchipuram structure.",
-                    "image":"http://localhost:8080/demo-media/Saree.jpg"
+                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/saree.jpg"
                   },
                   {
                     "title":"Finishing",
                     "description":"The saree is inspected, folded, and prepared for presentation.",
-                    "image":"http://localhost:8080/demo-media/11.JPG"
+                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/11.jpg"
                   }
                 ]
                 """);
@@ -343,16 +343,16 @@ public class DemoDataSeeder {
                   {
                     "customerName":"Demo Customer",
                     "content":"Beautiful silk texture, rich zari, and perfect festive finish.",
-                    "image":"http://localhost:8080/demo-media/img1.jpg",
+                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/img1.jpg",
                     "video":""
                   }
                 ]
                 """);
 
         sareeJournalRepository.saveAllAndFlush(List.of(
-                sareeJournal("Royal Maroon Kanchipuram Silk Saree", BASE + "10.JPG", BASE + "zari.webp", heritageSteps, customerReview),
-                sareeJournal("Peacock Blue Korvai Silk Saree", BASE + "11.JPG", BASE + "zari.webp", heritageSteps, customerReview),
-                sareeJournal("Golden Butta Bridal Silk Saree", BASE + "Saree.jpg", BASE + "zari.webp", heritageSteps, customerReview)
+                sareeJournal("Royal Maroon Kanchipuram Silk Saree", BASE + "10.jpg", BASE + "zari.webp", heritageSteps, customerReview),
+                sareeJournal("Peacock Blue Korvai Silk Saree", BASE + "11.jpg", BASE + "zari.webp", heritageSteps, customerReview),
+                sareeJournal("Golden Butta Bridal Silk Saree", BASE + "saree.jpg", BASE + "zari.webp", heritageSteps, customerReview)
         ));
     }
 

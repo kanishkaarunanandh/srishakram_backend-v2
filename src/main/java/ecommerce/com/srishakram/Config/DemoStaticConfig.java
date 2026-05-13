@@ -13,16 +13,13 @@ import java.nio.file.Paths;
 @Configuration
 public class DemoStaticConfig implements WebMvcConfigurer {
 
-    @Value("${demo.media.source-dir:../srishakrm images}")
-    private String mediaSourceDir;
-
     @Value("${demo.upload.dir:demo-uploads}")
     private String uploadDir;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/demo-media/**")
-                .addResourceLocations(toLocation(mediaSourceDir));
+                .addResourceLocations("classpath:/static/demo-media/");
 
         Path uploads = Paths.get(uploadDir).toAbsolutePath().normalize();
         try {
@@ -35,7 +32,4 @@ public class DemoStaticConfig implements WebMvcConfigurer {
                 .addResourceLocations(uploads.toUri().toString());
     }
 
-    private String toLocation(String path) {
-        return Paths.get(path).toAbsolutePath().normalize().toUri().toString();
-    }
 }
