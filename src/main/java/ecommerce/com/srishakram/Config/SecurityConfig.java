@@ -23,7 +23,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:5173}")
+    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:5173,https://srishakram-frontend-v2.vercel.app}")
     private List<String> allowedOrigins;
 
     @Bean
@@ -43,8 +43,21 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/verify/**").permitAll()
                         .requestMatchers("/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers(
+                                "/catelog/**",
+                                "/upload/**",
+                                "/api/search/**",
+                                "/api/saree-journal/**",
+                                "/images/**",
+                                "/videos/**",
+                                "/uploads/**",
+                                "/demo-media/**",
+                                "/demo-uploads/**",
+                                "/static/**"
+                        ).permitAll()
                         .requestMatchers("/auth/verify/allow").hasRole("ADMIN")
                         .requestMatchers("/files/**").hasRole("ADMIN")
                         .requestMatchers("/admin/auth/**").hasRole("ADMIN")
