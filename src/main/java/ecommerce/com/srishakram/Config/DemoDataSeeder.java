@@ -283,7 +283,6 @@ public class DemoDataSeeder {
         order.setItems(List.of(orderItem(products.get(0), 1L), orderItem(products.get(1), 1L)));
         order.setOrderStatus("Processing");
         order.setPaymentMethod("Demo UPI");
-        order.setRazorpayOrderId("demo_order_1001");
         order.setAmount(27498);
         order.setPaymentId("demo_payment_1001");
 

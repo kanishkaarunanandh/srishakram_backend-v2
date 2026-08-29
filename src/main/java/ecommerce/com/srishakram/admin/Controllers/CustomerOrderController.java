@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @CrossOrigin(origins = "*")
 public class CustomerOrderController {
@@ -27,105 +25,114 @@ public class CustomerOrderController {
     @Autowired
     private OrderStatusHistoryRepository orderStatusHistoryRepository;
 
+
+    // CREATE ORDER
     @PostMapping("/create-order")
-    public ResponseEntity<CustomerOrder> createOrder(@RequestBody CustomerOrder customerOrder) {
+    public ResponseEntity<CustomerOrder> createOrder(
+            @RequestBody CustomerOrder customerOrder
+    ) {
         try {
-            Users loggedInUser = userService.findByEmail(customerOrder.getEmail());
+
+            // Find logged-in user
+            Users loggedInUser =
+                    userService.findByEmail(customerOrder.getEmail());
+
             if (loggedInUser == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(null);
             }
 
-            // Set order status based on payment method
+            /*
+             * Payment method is only stored.
+             *
+             * ONLINE -> demo online payment
+             * COD    -> cash on delivery
+             */
+
             if ("COD".equalsIgnoreCase(customerOrder.getPaymentMethod())) {
-                customerOrder.setOrderStatus("COD"); // directly mark as COD
-                customerOrder.setRazorpayOrderId(null); // no Razorpay order
+
+                customerOrder.setPaymentMethod("COD");
+                customerOrder.setOrderStatus("COD");
+
             } else {
-                customerOrder.setOrderStatus("created"); // default for online payments
+
+                customerOrder.setPaymentMethod("ONLINE");
+                customerOrder.setOrderStatus("ONLINE");
             }
 
-            CustomerOrder createdOrder = customerOrderService.createOrder(customerOrder, loggedInUser);
 
-            // Only for online payment: create Razorpay order and update razorpayOrderId
-            if (!"COD".equalsIgnoreCase(customerOrder.getPaymentMethod())) {
-                // call Razorpay and set razorpayOrderId here
-                // customerOrder.setRazorpayOrderId(razorpayOrder.getId());
-            }
+            CustomerOrder createdOrder =
+                    customerOrderService.createOrder(
+                            customerOrder,
+                            loggedInUser
+                    );
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(createdOrder);
+
         } catch (Exception e) {
+
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
 
-
-
-    @PostMapping("/handle-payment-callback")
-    public ResponseEntity<Map<String, Object>> handlePaymentCallback(@RequestBody Map<String, String> payload) {
-        try {
-            String razorpayPaymentId = payload.get("razorpay_payment_id");
-            String razorpayOrderId = payload.get("razorpay_order_id");
-
-            if (razorpayPaymentId == null || razorpayOrderId == null) {
-                throw new RuntimeException("Invalid payment payload");
-            }
-
-            // Use the existing updateOrder method
-            CustomerOrder updatedOrder = customerOrderService.updateOrder(payload);
-
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "Payment verified successfully",
-                    "orderId", updatedOrder.getOrderId(),
-                    "status", updatedOrder.getOrderStatus()
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", e.getMessage()
-            ));
-        }
-    }
-
-
+    // DELETE ORDER
     @DeleteMapping("/orders/{id}")
     @Transactional
     public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
+
         try {
-            // Check if order exists
+
             if (!customerOrderRepository.existsById(id)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
                         .body("Order not found with ID: " + id);
             }
 
-            // Get the order first
-            CustomerOrder order = customerOrderRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Order not found"));
 
-            // Step 1: Delete all order status history records for this order
+            CustomerOrder order =
+                    customerOrderRepository.findById(id)
+                            .orElseThrow(() ->
+                                    new RuntimeException("Order not found")
+                            );
+
+
+            // Delete order status history
             orderStatusHistoryRepository.deleteByOrderId(id);
 
-            // Step 2: Clear order items to avoid foreign key constraint issues
+
+            // Clear order items
             if (order.getItems() != null) {
                 order.getItems().clear();
             }
 
-            // Step 3: Save the order to persist the cleared relationships
+
+            // Save relationship changes
             customerOrderRepository.save(order);
 
-            // Step 4: Now delete the order
+
+            // Delete order
             customerOrderRepository.delete(order);
+
 
             return ResponseEntity.ok("Order deleted successfully");
 
+
         } catch (Exception e) {
+
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to delete order: " + e.getMessage());
         }
     }
-
-
-
 }

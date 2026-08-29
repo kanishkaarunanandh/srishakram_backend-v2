@@ -34,7 +34,6 @@ public class CustomerOrder {
 
     private String orderStatus;
     private String paymentMethod;
-    private String razorpayOrderId;
     private Integer amount;
     private String paymentId;
 }

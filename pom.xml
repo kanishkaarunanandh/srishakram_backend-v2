@@ -95,11 +95,6 @@
             <artifactId>hibernate-types-60</artifactId>
             <version>2.21.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.razorpay</groupId>
-            <artifactId>razorpay-java</artifactId>
-            <version>1.4.6</version>
-        </dependency>
 
         <dependency>
             <groupId>io.hypersistence</groupId>

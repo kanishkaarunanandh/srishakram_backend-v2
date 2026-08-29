@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
-    Optional<CustomerOrder> findByRazorpayOrderId(String razorPayOrderId);
     List<CustomerOrder> findByUser_Id(Long customerId);
     List<CustomerOrder> findByOrderStatusNot(String status);
 
