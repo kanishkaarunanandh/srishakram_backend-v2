@@ -25,7 +25,7 @@ public class productService {
     }
 
     public List<Products> getRecentProducts() {
-        return productrepo.findTop7ByOrderByIdDesc();
+        return productrepo.findTop6ByOrderByIdDesc();
     }
 
     public Products getProducts(Long id) {

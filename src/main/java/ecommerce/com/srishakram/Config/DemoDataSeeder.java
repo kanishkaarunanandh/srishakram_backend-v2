@@ -39,7 +39,7 @@ import java.util.Map;
 @Configuration
 public class DemoDataSeeder {
 
-    private static final String BASE = "https://srishakram-backend-v2.onrender.com/demo-media/";
+    private static final String BASE = "http://localhost:8080/demo-media/";
 
     @Bean
     CommandLineRunner seedDemoData(
@@ -120,17 +120,37 @@ public class DemoDataSeeder {
         adminOrdersRepository.deleteAll();
     }
 
-    private List<Products> seedProducts(productRepository productRepository) {
-        List<Products> products = List.of(
-                product(1001L, "Royal Maroon Kanchipuram Silk Saree", "Traditional maroon silk saree with rich zari border for festive occasions.", 8999, 12499.0, "All Kanchipuram Silk Saree", "Contrast", "Maroon", BASE + "img1.jpg", true, true),
-                product(1002L, "Peacock Blue Korvai Silk Saree", "Elegant blue korvai weave with temple border and classic pallu detailing.", 10499, 14999.0, "Korvai", "Ganga Jamuna Bordar", "Blue", BASE + "img2.jpg", true, false),
-                product(1003L, "Golden Butta Bridal Silk Saree", "Premium bridal silk saree with golden butta motifs and soft sheen.", 12999, 17999.0, "Brocade", "Butta", "Gold", BASE + "img3.jpg", true, true),
-                product(1004L, "Rose Pink Double Naada Saree", "Lightweight pink double naada silk saree with a refined woven border.", 7499, 9999.0, "Double Naada", "Stripes", "Pink", BASE + "img4.jpg", true, false),
-                product(1005L, "Emerald Morning-Evening Silk Saree", "Dual-tone silk saree with refined color play and graceful drape.", 9499, 13999.0, "Morning-Evening", "Contrast", "Green", BASE + "img5.jpg", false, true),
-                product(1006L, "Ivory Pure Silk Saree", "Subtle pure silk saree with understated zari highlights.", 6999, 9499.0, "Pure Silk", "Checks", "Ivory", BASE + "img6.jpg", true, false),
-                product(1007L, "Crimson Extra Weft Silk Saree", "Statement crimson saree with extra weft motifs and grand traditional finish.", 11999, 15999.0, "All Kanchipuram Silk Saree", "Extra Weft", "Crimson", BASE + "img7.jpg", true, true)
+    private List<Products> seedProducts(productRepository productRepository){
+        List<Products> products=List.of(
+                product(1001L,"Royal Maroon Kanchipuram Silk Saree","Traditional maroon silk saree with a rich zari border, perfect for festive occasions.",8999,12499.0,"All Kanchipuram Silk Saree","Contrast","Maroon",BASE+"img1.jpg",true,true),
+                product(1002L,"Dark Green Korvai Silk Saree","Elegant Dark Green Korvai saree with a contrasting temple border and detailed pallu.",10499,14999.0,"Korvai","Ganga Jamuna Border","Blue",BASE+"img2.jpg",true,false),
+                product(1003L,"Golden Butta Bridal Silk Saree","Premium bridal silk saree featuring rich golden butta motifs and luxurious zari work.",12999,17999.0,"Brocade","Butta","Gold",BASE+"img3.jpg",true,true),
+                product(1004L,"Dark Blue Double Naada Silk Saree","Elegant Dark Blue Double Naada saree with a refined woven border and soft silk finish.",7499,9999.0,"Double Naada","Stripes","Pink",BASE+"img4.jpg",true,false),
+                product(1005L,"Emerald Morning Evening Silk Saree","A beautiful emerald dual-tone silk saree with graceful color play and elegant drape.",9499,13999.0,"Morning-Evening","Contrast","Green",BASE+"img5.jpg",false,true),
+                product(1006L,"Lavender Pure Silk Saree","Soft lavender pure silk saree with subtle zari highlights and an elegant traditional look.",6999,9499.0,"Pure Silk","Checks","Lavender",BASE+"img6.jpg",true,false),
+                product(1007L,"Ivory Pearl Pure Silk Saree","Elegant ivory pure silk saree with pearl-toned zari details and a graceful finish.",7499,10499.0,"Pure Silk","Checks","Ivory",BASE+"img10.jpg",true,false),
+                product(1008L,"Classic White Temple Border Saree","Traditional white silk saree featuring a rich temple-inspired zari border.",7999,10999.0,"Pure Silk","Temple Border","White",BASE+"img11.jpg",true,false),
+                product(1009L,"Teal Blue Morning Evening Saree","A rich teal blue dual-tone saree designed to look elegant for both daytime and evening events.",9999,14499.0,"Morning-Evening","Dual Tone","Teal",BASE+"img8.jpg",false,true),
+                product(1010L,"Royal Purple Dual Tone Saree","Premium purple silk saree with a beautiful dual-tone effect and subtle zari detailing.",10499,14999.0,"Morning-Evening","Contrast","Purple",BASE+"img9.jpg",false,true),
+                product(1011L,"Ruby Red Brocade Silk Saree","A luxurious ruby red brocade saree featuring intricate zari patterns and festive styling.",13499,18499.0,"Brocade","Floral Brocade","Red",BASE+"img13.jpg",true,true),
+                product(1012L,"Champagne Gold Brocade Saree","Sophisticated champagne gold silk saree with intricate brocade weaving and rich zari work.",13999,18999.0,"Brocade","Butta","Champagne",BASE+"img12.jpg",true,true),
+                product(1013L,"Mustard Green Korvai Silk Saree","Classic mustard and green Korvai saree with a bold contrast border and traditional pallu.",10999,15499.0,"Korvai","Contrast Border","Mustard",BASE+"img14.jpg",true,true),
+                product(1014L,"Crimson Black Korvai Saree","Rich crimson silk paired with a deep black Korvai border for a bold traditional appearance.",11499,15999.0,"Korvai","Temple Border","Red",BASE+"img15.jpg",true,false),
+                product(1015L,"Sky Blue Double Naada Saree","Light sky blue Double Naada silk saree featuring elegant woven stripes and a soft finish.",7999,10999.0,"Double Naada","Stripes","Sky Blue",BASE+"img16.jpg",true,true),
+                product(1016L,"Wine Red Double Naada Silk Saree","Rich wine red Double Naada saree with subtle stripe detailing and a traditional woven border.",8299,11499.0,"Double Naada","Woven Border","Wine",BASE+"img17.jpg",true,false),
+                product(1017L,"Coral Pink Space Silk Saree","A vibrant coral pink Space Silk saree with elegant zari motifs and a rich border.",9299,12999.0,"Space Silk","Zari Border","Coral Pink",BASE+"img18.jpg",true,true),
+                product(101711L,"Sky Blue Space Silk Saree","A vibrant Sky Blue Space Silk saree with elegant zari motifs and a rich border.",9299,12999.0,"Space Silk","Zari Border","Sky Blue",BASE+"img18A.jpg",true,true),
+                product(101712L,"Lavendar Space Silk Saree","A vibrant Lavendar Space Silk saree with elegant zari motifs and a rich border.",9299,12999.0,"Space Silk","Zari Border","Lavendar",BASE+"img18B.jpg",true,true),
+                product(1018L,"Maroon Daily Wear Saree","A comfortable Maroon saree designed for elegant everyday wear with a classic temple-inspired border.",10299,14599.0,"Daily Wear","Temple Border","Maroon",BASE+"img19.jpg",true,false),
+                product(101811L,"Cream Daily Wear Saree","A comfortable Cream saree designed for elegant everyday wear with a classic temple-inspired border.",10299,14599.0,"Daily Wear","Temple Border","Cream",BASE+"img19A.jpg",true,false),
+                product(101812L,"Magenta Daily Wear Saree","A comfortable Magenta saree designed for elegant everyday wear with a classic temple-inspired border.",10299,14599.0,"Daily Wear","Temple Border","Magenta",BASE+"img19B.jpg",true,false),
+                product(1019L,"Saffron Orange Soft Silk Saree","Bright saffron orange soft silk saree with delicate zari motifs and a lightweight graceful drape.",7599,10599.0,"Soft Silk","Zari Motif","Orange",BASE+"img20.jpg",true,true),
+                product(101911L,"Wine Red Soft Silk Saree","Bright Wine Red soft silk saree with delicate zari motifs and a lightweight graceful drape.",7599,10599.0,"Soft Silk","Zari Motif","Wine Red",BASE+"img20A.jpg",true,true),
+                product(101912L,"White With Sky Blue Border Soft Silk Saree","Bright White With Sky Blue Broder soft silk saree with delicate zari motifs and a lightweight graceful drape.",7599,10599.0,"Soft Silk","Zari Motif","White",BASE+"img20B.jpg",true,true),
+                product(1020L,"Magenta Affordable Luxury Silk Saree","A premium-looking magenta silk saree with rich brocade-inspired detailing and luxurious golden zari at an affordable price.",14999,19999.0,"Affordable Luxury","Bridal Brocade","Magenta",BASE+"img21.jpg",true,true),
+                product(102011L,"Magenta Affordable Luxury Silk Saree","A premium-looking magenta silk saree with rich brocade-inspired detailing and luxurious golden zari at an affordable price.",14999,19999.0,"Affordable Luxury","Bridal Brocade","Magenta",BASE+"img21A1.jpg",true,true),
+                product(102012L,"Magenta Affordable Luxury Silk Saree","A premium-looking magenta silk saree with rich brocade-inspired detailing and luxurious golden zari at an affordable price.",14999,19999.0,"Affordable Luxury","Bridal Brocade","Magenta",BASE+"img21B.jpg",true,true)
         );
-
         return productRepository.saveAll(products);
     }
 
@@ -234,10 +254,10 @@ public class DemoDataSeeder {
         image.setImg4(BASE + "design3.mp4");
         image.setImg5(BASE + "design4.mp4");
         image.setImg6(BASE + "design5.mp4");
-        image.setImg7(BASE + "download%20(1).jpg");
-        image.setImg8(BASE + "download%20(2).jpg");
-        image.setImg9(BASE + "download%20(3).jpg");
-        image.setImg10(BASE + "11.jpg");
+//        image.setImg7(BASE + "download%20(1).jpg");
+//        image.setImg8(BASE + "download%20(2).jpg");
+//        image.setImg9(BASE + "download%20(3).jpg");
+        image.setImg10(BASE + "30.jpg");
         image.setImg11(BASE + "saree.jpg");
         image.setImg12(BASE + "10.jpg");
         image.setImg13(BASE + "11.jpg");
@@ -323,17 +343,17 @@ public class DemoDataSeeder {
                   {
                     "title":"Zari Preparation",
                     "description":"Gold-toned zari is readied for borders, motifs, and pallu work.",
-                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/zari.webp"
+                    "image":"http://localhost:8080/demo-media/zari.webp"
                   },
                   {
                     "title":"Handloom Weaving",
                     "description":"Artisans weave the saree with traditional Kanchipuram structure.",
-                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/saree.jpg"
+                    "image":"http://localhost:8080/demo-media/saree.jpg"
                   },
                   {
                     "title":"Finishing",
                     "description":"The saree is inspected, folded, and prepared for presentation.",
-                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/11.jpg"
+                    "image":"http://localhost:8080/demo-media/11.jpg"
                   }
                 ]
                 """);
@@ -342,7 +362,7 @@ public class DemoDataSeeder {
                   {
                     "customerName":"Demo Customer",
                     "content":"Beautiful silk texture, rich zari, and perfect festive finish.",
-                    "image":"https://srishakram-backend-v2.onrender.com/demo-media/img1.jpg",
+                    "image":"http://localhost:8080/demo-media/img1.jpg",
                     "video":""
                   }
                 ]

@@ -35,7 +35,7 @@ public interface productRepository extends JpaRepository<Products, Long> {
 
     List<Products> findTop10ByColorIgnoreCase(String q);
 
-    List<Products> findTop7ByOrderByIdDesc();
+    List<Products> findTop6ByOrderByIdDesc();
 
     Optional<Products> findById(Long id);
 
